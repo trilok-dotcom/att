@@ -14,6 +14,9 @@ const allowedOrigins = (
   .map((origin) => origin.trim())
   .filter(Boolean);
 
+allowedOrigins.push("https://newatt.netlify.app");
+allowedOrigins.push("https://newatt.netlify.app/");
+
 (async () => {
   await connectDB();
 
