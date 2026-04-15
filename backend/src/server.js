@@ -20,8 +20,7 @@ allowedOrigins.push("https://newatt.netlify.app/");
 (async () => {
   await connectDB();
 
-  const server = http.createServer();
-  const io = new Server(server, {
+  const io = new Server({
     cors: {
       origin: allowedOrigins,
       methods: ["GET", "POST"],
@@ -32,8 +31,9 @@ allowedOrigins.push("https://newatt.netlify.app/");
   setupSocket(io);
 
   const app = createApp(io);
-  server.removeAllListeners("request");
-  server.on("request", app);
+  const server = http.createServer(app);
+  
+  io.attach(server);
 
   server.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
