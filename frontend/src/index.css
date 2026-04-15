@@ -1,0 +1,37 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;700&display=swap");
+@import "tailwindcss";
+
+:root {
+  font-family: "Manrope", sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+.input {
+  @apply w-full rounded-lg border border-slate-300 px-3 py-2 outline-none ring-amber-300 focus:ring;
+}
+
+.btn-primary {
+  @apply rounded-lg bg-amber-700 px-4 py-2 font-medium text-white transition hover:bg-amber-800;
+}
+
+.stats-card {
+  @apply rounded-xl border border-slate-200 bg-slate-50 p-4 text-center;
+}
+
+.stats-card h2 {
+  @apply mt-1 text-3xl font-semibold text-amber-800;
+}
+
+.stats-card p {
+  @apply text-sm text-slate-500;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Fraunces", serif;
+}
