@@ -23,7 +23,7 @@ const run = async () => {
   let student = await User.findOne({ email: STUDENT_EMAIL });
   if (!student) {
     student = await User.create({
-      name: "Student User",
+      name: "test",
       email: STUDENT_EMAIL,
       password: PASSWORD,
       role: "student",
@@ -32,7 +32,7 @@ const run = async () => {
       semester: 6,
     });
   } else {
-    student.name = student.name || "Student User";
+    student.name = "test";
     student.role = "student";
     student.password = PASSWORD;
     if (!student.collegeId) student.collegeId = "S-1001";
