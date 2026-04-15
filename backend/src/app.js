@@ -22,6 +22,10 @@ const createApp = (io) => {
     .split(",")
     .map((origin) => origin.trim())
     .filter(Boolean);
+  
+  // Explicitly inject the user's specific Netlify URL to absolutely guarantee CORS resolution
+  allowedOrigins.push("https://newatt.netlify.app");
+  allowedOrigins.push("https://newatt.netlify.app/");
 
   app.set("trust proxy", 1);
   app.use(
