@@ -6,6 +6,12 @@ export default function QRScanner({ onScanSuccess }) {
   const [scanError, setScanError] = useState("");
   const scannerId = useMemo(() => `scanner-${Math.random().toString(36).slice(2)}`, []);
 
+  const onScanSuccessRef = useRef(onScanSuccess);
+
+  useEffect(() => {
+    onScanSuccessRef.current = onScanSuccess;
+  }, [onScanSuccess]);
+
   useEffect(() => {
     if (!scannerId) return;
 
@@ -23,7 +29,9 @@ export default function QRScanner({ onScanSuccess }) {
         if (decodedText !== lastScannedText) {
           lastScannedText = decodedText;
           setScanError("");
-          onScanSuccess(decodedText);
+          if (onScanSuccessRef.current) {
+            onScanSuccessRef.current(decodedText);
+          }
         }
       },
       (errorMessage) => {
@@ -41,7 +49,7 @@ export default function QRScanner({ onScanSuccess }) {
         }).catch(() => {});
       }
     };
-  }, [scannerId, onScanSuccess]);
+  }, [scannerId]);
 
   return (
     <div className="rounded-2xl border border-slate-300 bg-white p-4 shadow-sm">
