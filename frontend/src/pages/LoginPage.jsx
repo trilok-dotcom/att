@@ -54,24 +54,7 @@ export default function LoginPage() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="space-y-1.5">
-            <label className="block text-sm font-semibold text-gray-700 ml-1">Student Name <span className="text-gray-400 font-normal">(if student)</span></label>
-            <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
-                    <User size={18} />
-                </div>
-                <input
-                    type="text"
-                    name="name"
-                    value={form.name}
-                    onChange={handleChange}
-                    placeholder="E.g. John Doe"
-                    disabled={isLoading}
-                    className="w-full pl-11 pr-4 py-3.5 bg-white border border-gray-200 rounded-2xl outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/50 shadow-sm transition-all"
-                />
-            </div>
-          </div>
-
+          {/* Name field removed as it's no longer required for login */}
           <div className="space-y-1.5">
             <label className="block text-sm font-semibold text-gray-700 ml-1">Email address</label>
             <div className="relative">

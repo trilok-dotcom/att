@@ -303,7 +303,7 @@ export default function TeacherDashboard() {
                             <input
                                 value={usnQuery}
                                 onChange={(e) => setUsnQuery(e.target.value)}
-                                placeholder="E.g: 1ga23is171"
+                                placeholder="E.g: iga20is001"
                                 className="w-full pl-11 pr-4 py-3.5 bg-white border border-gray-200 rounded-2xl outline-none focus:border-brand-500 shadow-sm transition-all"
                             />
                         </div>

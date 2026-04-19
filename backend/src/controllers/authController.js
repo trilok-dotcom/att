@@ -48,18 +48,7 @@ const login = asyncHandler(async (req, res) => {
   }
 
   if (user.role === "student") {
-    const normalizedIncomingName = (name || "").trim().toLowerCase();
-    const normalizedSavedName = (user.name || "").trim().toLowerCase();
-
-    if (!normalizedIncomingName) {
-      res.status(400);
-      throw new Error("Student name is required for login");
-    }
-
-    if (normalizedIncomingName !== normalizedSavedName) {
-      res.status(401);
-      throw new Error("Student name does not match account");
-    }
+    // Note: Student name validation removed to improve login reliability
   }
 
   return res.json({

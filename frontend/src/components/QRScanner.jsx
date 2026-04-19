@@ -14,14 +14,23 @@ export default function QRScanner({ onScanSuccess }) {
       {
         fps: 10,
         qrbox: { width: 240, height: 240 },
+        videoConstraints: {
+          facingMode: "environment"
+        },
+        supportedScanTypes: [0] // SCAN_TYPE_CAMERA
       },
       false
     );
 
+    let lastScannedText = null;
+
     scanner.render(
       (decodedText) => {
-        setScanError("");
-        onScanSuccess(decodedText);
+        if (decodedText !== lastScannedText) {
+          lastScannedText = decodedText;
+          setScanError("");
+          onScanSuccess(decodedText);
+        }
       },
       () => {}
     );
