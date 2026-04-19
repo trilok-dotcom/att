@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Html5Qrcode } from "html5-qrcode";
+import { Html5QrcodeScanner } from "html5-qrcode";
 
 export default function QRScanner({ onScanSuccess }) {
   const scannerRef = useRef(null);
@@ -15,16 +15,22 @@ export default function QRScanner({ onScanSuccess }) {
   useEffect(() => {
     if (!scannerId) return;
 
-    const html5QrCode = new Html5Qrcode(scannerId);
-    scannerRef.current = html5QrCode;
+    const scanner = new Html5QrcodeScanner(
+      scannerId,
+      {
+        fps: 10,
+        videoConstraints: {
+          facingMode: "environment"
+        },
+        rememberLastUsedCamera: true,
+      },
+      false
+    );
+
     let lastScannedText = null;
     let scanTimeout = null;
 
-    html5QrCode.start(
-      { facingMode: "environment" }, 
-      {
-        fps: 15,
-      },
+    scanner.render(
       (decodedText) => {
         if (decodedText !== lastScannedText) {
           lastScannedText = decodedText;
@@ -39,20 +45,18 @@ export default function QRScanner({ onScanSuccess }) {
           }, 3000);
         }
       },
-      (errorMessage) => {
-        // Ignored
+      (error) => {
+        // Ignored internally
       }
-    ).catch(err => {
-      setScanError("Failed to start camera. Try restarting your browser or checking permissions.");
-      console.error("Camera start error:", err);
-    });
+    );
+
+    scannerRef.current = scanner;
 
     return () => {
       if (scanTimeout) clearTimeout(scanTimeout);
-      if (scannerRef.current && scannerRef.current.isScanning) {
-        scannerRef.current.stop().then(() => {
-          scannerRef.current.clear();
-        }).catch(() => {});
+      if (scannerRef.current) {
+        scannerRef.current.clear().catch(() => {});
+        scannerRef.current = null;
       }
     };
   }, [scannerId]);
