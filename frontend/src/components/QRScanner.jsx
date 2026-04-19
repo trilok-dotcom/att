@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Html5QrcodeScanner } from "html5-qrcode";
+import { Html5Qrcode } from "html5-qrcode";
 
 export default function QRScanner({ onScanSuccess }) {
   const scannerRef = useRef(null);
@@ -7,24 +7,18 @@ export default function QRScanner({ onScanSuccess }) {
   const scannerId = useMemo(() => `scanner-${Math.random().toString(36).slice(2)}`, []);
 
   useEffect(() => {
-    if (scannerRef.current) return undefined;
+    if (!scannerId) return;
 
-    const scanner = new Html5QrcodeScanner(
-      scannerId,
+    const html5QrCode = new Html5Qrcode(scannerId);
+    scannerRef.current = html5QrCode;
+    let lastScannedText = null;
+
+    html5QrCode.start(
+      { facingMode: "environment" }, 
       {
         fps: 10,
         qrbox: { width: 240, height: 240 },
-        videoConstraints: {
-          facingMode: "environment"
-        },
-        supportedScanTypes: [0] // SCAN_TYPE_CAMERA
       },
-      false
-    );
-
-    let lastScannedText = null;
-
-    scanner.render(
       (decodedText) => {
         if (decodedText !== lastScannedText) {
           lastScannedText = decodedText;
@@ -32,15 +26,19 @@ export default function QRScanner({ onScanSuccess }) {
           onScanSuccess(decodedText);
         }
       },
-      () => {}
-    );
-
-    scannerRef.current = scanner;
+      (errorMessage) => {
+        // Ignored. html5-qrcode rapidly fires error callbacks when no QR code is in frame
+      }
+    ).catch(err => {
+      setScanError("Failed to start camera. Please ensure camera permissions are granted.");
+      console.error("Camera start error:", err);
+    });
 
     return () => {
-      if (scannerRef.current) {
-        scannerRef.current.clear().catch(() => {});
-        scannerRef.current = null;
+      if (scannerRef.current && scannerRef.current.isScanning) {
+        scannerRef.current.stop().then(() => {
+          scannerRef.current.clear();
+        }).catch(() => {});
       }
     };
   }, [scannerId, onScanSuccess]);
