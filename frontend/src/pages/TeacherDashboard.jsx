@@ -247,7 +247,7 @@ export default function TeacherDashboard() {
                     <div className="mx-auto w-72 h-72 bg-white rounded-3xl p-4 shadow-xl border-4 border-gray-800 flex items-center justify-center relative group overflow-hidden">
                         {/* Scanner animation line */}
                         <div className="absolute left-0 right-0 h-1 bg-brand-400/50 shadow-[0_0_15px_rgba(99,102,241,1)] animate-[scan_2s_ease-in-out_infinite] pointer-events-none"></div>
-                        <img src={activeSession.qrCodeDataUrl} alt="Attendance QR Code" className="w-full h-full rounded-2xl object-cover" />
+                        <img src={activeSession.qrCodeDataUrl} alt="Attendance QR Code" className="w-full h-full object-contain" />
                     </div>
                     
                     <p className="mt-8 text-sm font-medium text-gray-400">

@@ -18,12 +18,12 @@ export default function QRScanner({ onScanSuccess }) {
     const html5QrCode = new Html5Qrcode(scannerId);
     scannerRef.current = html5QrCode;
     let lastScannedText = null;
+    let scanTimeout = null;
 
     html5QrCode.start(
       { facingMode: "environment" }, 
       {
-        fps: 10,
-        qrbox: { width: 240, height: 240 },
+        fps: 15,
       },
       (decodedText) => {
         if (decodedText !== lastScannedText) {
@@ -32,17 +32,23 @@ export default function QRScanner({ onScanSuccess }) {
           if (onScanSuccessRef.current) {
             onScanSuccessRef.current(decodedText);
           }
+          
+          if (scanTimeout) clearTimeout(scanTimeout);
+          scanTimeout = setTimeout(() => {
+            lastScannedText = null;
+          }, 3000);
         }
       },
       (errorMessage) => {
-        // Ignored. html5-qrcode rapidly fires error callbacks when no QR code is in frame
+        // Ignored
       }
     ).catch(err => {
-      setScanError("Failed to start camera. Please ensure camera permissions are granted.");
+      setScanError("Failed to start camera. Try restarting your browser or checking permissions.");
       console.error("Camera start error:", err);
     });
 
     return () => {
+      if (scanTimeout) clearTimeout(scanTimeout);
       if (scannerRef.current && scannerRef.current.isScanning) {
         scannerRef.current.stop().then(() => {
           scannerRef.current.clear();
